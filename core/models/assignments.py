@@ -38,8 +38,6 @@ class Assignment(db.Model):
     updated_at = db.Column(db.TIMESTAMP(
         timezone=True), default=helpers.get_utc_now, nullable=False, onupdate=helpers.get_utc_now)
 
-    def __repr__(self):
-        return '<Assignment %r>' % self.id
 
     @classmethod
     def filter(cls, *criterion):
@@ -70,14 +68,10 @@ class Assignment(db.Model):
     @classmethod
     def submit(cls, _id, teacher_id, principal: Principal):
         assignment = Assignment.get_by_id(_id)
-        assertions.assert_found(
-            assignment, 'No assignment with this id was found')
-        assertions.assert_valid(assignment.student_id == principal.student_id,
-                                'This assignment belongs to some other student')
-        assertions.assert_valid(
-            assignment.state == AssignmentStateEnum.DRAFT, 'only a draft assignment can be submitted')
-        assertions.assert_valid(assignment.content is not None,
-                                'Assignment with empty content cannot be submitted')
+        assertions.assert_found(assignment, 'No assignment with this id was found')
+        assertions.assert_valid(assignment.student_id == principal.student_id,'This assignment belongs to some other student')
+        assertions.assert_valid(assignment.state == AssignmentStateEnum.DRAFT, 'only a draft assignment can be submitted')
+        assertions.assert_valid(assignment.content is not None,'Assignment with empty content cannot be submitted')
 
         assignment.teacher_id = teacher_id
         assignment.state = AssignmentStateEnum.SUBMITTED
