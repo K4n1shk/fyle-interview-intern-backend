@@ -9,10 +9,11 @@ from werkzeug.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 
 app.register_blueprint(student_assignments_resources, url_prefix='/student')
-app.register_blueprint(teacher_assignments_resources,url_prefix='/teacher')
+app.register_blueprint(teacher_assignments_resources, url_prefix='/teacher')
+
 
 @app.route('/')
-def ready(): 
+def ready():
     response = jsonify({
         'status': 'ready',
         'time': helpers.get_utc_now()
